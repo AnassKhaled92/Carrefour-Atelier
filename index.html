@@ -2,180 +2,87 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Carrefour l'atelier (ES modules Firebase)</title>
+  <title>Carrefour l'atelier (ES Modules Firebase)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    /* ====== RESET & BASE ====== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
+    /* RESET & BASE */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
       background: linear-gradient(120deg, #4facfe, #00f2fe);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
     }
-
-    h1, h2, h3, h4 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
+    h1, h2, h3, h4 { text-align: center; margin-bottom: 15px; }
     .container {
-      background: #fff;
-      width: 100%;
-      max-width: 600px;
-      border-radius: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-      padding: 20px;
-      margin-bottom: 30px;
+      background: #fff; width: 100%; max-width: 600px; border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2); padding: 20px; margin-bottom: 30px;
     }
-
     .btn {
-      display: inline-block;
-      margin: 10px 5px 0 5px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
+      display: inline-block; margin: 10px 5px 0 5px; padding: 12px 20px;
+      border: none; border-radius: 5px; color: #fff; font-size: 16px; cursor: pointer;
     }
-    .btn-primary {
-      background: #007bff;
-    }
-    .btn-primary:hover {
-      background: #0056b3;
-    }
-    .btn-secondary {
-      background: #6c757d;
-    }
-    .btn-secondary:hover {
-      background: #565e64;
-    }
-    .btn-danger {
-      background: #dc3545;
-    }
-    .btn-danger:hover {
-      background: #b02a37;
-    }
-
+    .btn-primary { background: #007bff; }
+    .btn-primary:hover { background: #0056b3; }
+    .btn-secondary { background: #6c757d; }
+    .btn-secondary:hover { background: #565e64; }
+    .btn-danger { background: #dc3545; }
+    .btn-danger:hover { background: #b02a37; }
     .mt-15 { margin-top: 15px; }
-
-    /* Sections cachées qu'on affiche dynamiquement */
-    .section {
-      display: none;
-    }
-
+    /* Sections */
+    .section { display: none; }
     .budget-amount {
-      font-size: 24px;
-      font-weight: bold;
-      color: #007bff;
-      margin: 15px 0;
-      text-align: center;
+      font-size: 24px; font-weight: bold; color: #007bff; margin: 15px 0; text-align: center;
     }
-
     .expense-form {
-      margin-top: 15px;
-      display: flex;
-      flex-direction: column;
+      margin-top: 15px; display: flex; flex-direction: column;
     }
-    .expense-form label {
-      margin-bottom: 5px;
-    }
+    .expense-form label { margin-bottom: 5px; }
     .expense-form input {
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 10px; font-size: 16px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;
     }
-
     .history {
-      margin-top: 15px;
-      background: #f9f9f9;
-      border-radius: 5px;
-      padding: 10px;
+      margin-top: 15px; background: #f9f9f9; border-radius: 5px; padding: 10px;
     }
-    .history h4 {
-      margin-bottom: 10px;
-    }
+    .history h4 { margin-bottom: 10px; }
     .history-entry {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 5px 0;
-      border-bottom: 1px solid #ddd;
+      display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #ddd;
     }
-    .history-entry:last-child {
-      border-bottom: none;
-    }
-    .history-date-amount {
-      font-size: 14px;
-    }
-
-    .fade {
-      animation: fadeIn 0.4s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-
+    .history-entry:last-child { border-bottom: none; }
+    .history-date-amount { font-size: 14px; }
+    .fade { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     #loadingMessage {
-      text-align: center;
-      color: #fff;
-      font-size: 18px;
-      margin-bottom: 20px;
+      text-align: center; color: #fff; font-size: 18px; margin-bottom: 20px;
     }
   </style>
 </head>
-
 <body>
-
+  <!-- Message de chargement -->
   <div id="loadingMessage">Chargement en cours…</div>
-
-  <h1>Carrefour l'atelier (ES modules)</h1>
-
+  <h1>Carrefour l'atelier (ES Modules)</h1>
   <div class="container">
-
     <!-- Menu principal -->
     <div id="menuPrincipal" class="section fade" style="display: none;">
       <h2>Menu principal</h2>
       <button class="btn btn-primary" onclick="afficherSection('horsVacances')">Hors vacances</button>
       <button class="btn btn-primary" onclick="afficherSection('vacancesScolaires')">Vacances scolaires</button>
       <br/>
-      <button class="btn btn-danger mt-15" onclick="reinitialiserBudgets()">
-        Réinitialiser tout
-      </button>
+      <button class="btn btn-danger mt-15" onclick="reinitialiserBudgets()">Réinitialiser tout</button>
     </div>
-
     <!-- SECTION : Hors vacances -->
     <div id="horsVacances" class="section fade">
       <h2>Budget Hors vacances</h2>
       <div class="budget-amount" id="horsVacancesBudget"></div>
-
       <form class="expense-form" onsubmit="deduireMontant(event, 'horsVacances')">
         <label for="horsVacancesDepense">Montant dépensé :</label>
         <input type="number" step="0.01" id="horsVacancesDepense" required />
         <button class="btn btn-primary" type="submit">Déduire</button>
       </form>
-
       <div class="history">
         <h4>Historique des dépenses</h4>
         <div id="horsVacancesHistory"></div>
       </div>
-
       <button class="btn btn-secondary mt-15" onclick="afficherSection('menuPrincipal')">Retour</button>
     </div>
-
     <!-- SECTION : Vacances scolaires -->
     <div id="vacancesScolaires" class="section fade">
       <h2>Vacances scolaires</h2>
@@ -183,7 +90,6 @@
       <button class="btn btn-primary" onclick="afficherSection('vacancesPrintemps')">Vacances de printemps</button>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('menuPrincipal')">Retour</button>
     </div>
-
     <!-- SECTION : Vacances d'hiver -->
     <div id="vacancesHiver" class="section fade">
       <h2>Vacances d'hiver</h2>
@@ -191,7 +97,6 @@
       <button class="btn btn-primary" onclick="afficherSection('clubEnfantsHiver')">Club enfants (hiver)</button>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesScolaires')">Retour</button>
     </div>
-
     <div id="clubAdosHiver" class="section fade">
       <h3>Club Ados – Vacances d'hiver</h3>
       <div class="budget-amount" id="adosHiverBudget"></div>
@@ -206,7 +111,6 @@
       </div>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesHiver')">Retour</button>
     </div>
-
     <div id="clubEnfantsHiver" class="section fade">
       <h3>Club Enfants – Vacances d'hiver</h3>
       <div class="budget-amount" id="enfantsHiverBudget"></div>
@@ -221,7 +125,6 @@
       </div>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesHiver')">Retour</button>
     </div>
-
     <!-- SECTION : Vacances de printemps -->
     <div id="vacancesPrintemps" class="section fade">
       <h2>Vacances de printemps</h2>
@@ -229,7 +132,6 @@
       <button class="btn btn-primary" onclick="afficherSection('clubEnfantsPrintemps')">Club enfants (printemps)</button>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesScolaires')">Retour</button>
     </div>
-
     <div id="clubAdosPrintemps" class="section fade">
       <h3>Club Ados – Vacances de printemps</h3>
       <div class="budget-amount" id="adosPrintempsBudget"></div>
@@ -244,7 +146,6 @@
       </div>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesPrintemps')">Retour</button>
     </div>
-
     <div id="clubEnfantsPrintemps" class="section fade">
       <h3>Club Enfants – Vacances de printemps</h3>
       <div class="budget-amount" id="enfantsPrintempsBudget"></div>
@@ -259,23 +160,22 @@
       </div>
       <button class="btn btn-secondary mt-15" onclick="afficherSection('vacancesPrintemps')">Retour</button>
     </div>
+  </div><!-- Fin container -->
 
-  </div><!-- .container -->
-
+  <!-- Script ES Modules -->
   <script type="module">
     /**************************************************************
-     *  1) Import des modules Firebase depuis le CDN
+     * 1) Import des modules Firebase depuis le CDN
      **************************************************************/
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-analytics.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
 
     /**************************************************************
-     *  2) Configuration & Initialisation
-     *     => REMPLACE ci-dessous par TES valeurs
+     * 2) Configuration & Initialisation
+     *    REMPLACE les valeurs ci-dessous par celles de ton projet
      **************************************************************/
-    const firebaseConfig = {
-// Import the functions you need from the SDKs you need
+   // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -289,22 +189,24 @@ const firebaseConfig = {
   projectId: "carrefour-3269f",
   storageBucket: "carrefour-3269f.firebasestorage.app",
   messagingSenderId: "903840045587",
-  appId: "1:903840045587:web:ccdc1ccdcfb2101cb9fde6",
-  measurementId: "G-MB0Z8HHCT7"
+  appId: "1:903840045587:web:d19ba26ba8cc5c5fb9fde6",
+  measurementId: "G-S195SPRJNE"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-    };
 
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
 
-    // Doc : "budgets" / "global"
+    // Référence du document "global" dans la collection "budgets"
     const docRef = doc(db, "budgets", "global");
 
+    /**************************************************************
+     * 3) Structure par défaut
+     **************************************************************/
     const budgetsParDefaut = {
       horsVacances: 800,
       adosHiver: 250,
@@ -321,7 +223,7 @@ const analytics = getAnalytics(app);
     let budgets = { ...budgetsParDefaut };
 
     /**************************************************************
-     *  Charger depuis Firestore
+     * 4) Charger depuis Firestore
      **************************************************************/
     async function chargerBudgetsDepuisFirestore() {
       const snap = await getDoc(docRef);
@@ -334,14 +236,14 @@ const analytics = getAnalytics(app);
     }
 
     /**************************************************************
-     *  Sauvegarder dans Firestore
+     * 5) Sauvegarder dans Firestore
      **************************************************************/
     async function sauvegarderBudgetsDansFirestore() {
       await setDoc(docRef, budgets);
     }
 
     /**************************************************************
-     *  Réinitialiser
+     * 6) Réinitialiser les budgets
      **************************************************************/
     async function reinitialiserBudgets() {
       if (!confirm("Êtes-vous sûr de vouloir tout réinitialiser ?")) return;
@@ -354,19 +256,19 @@ const analytics = getAnalytics(app);
     window.reinitialiserBudgets = reinitialiserBudgets;
 
     /**************************************************************
-     *  Affichage
+     * 7) Afficher les budgets et historiques
      **************************************************************/
     function afficherBudgets() {
-      document.getElementById("horsVacancesBudget").textContent     = budgets.horsVacances.toFixed(2) + " €";
-      document.getElementById("adosHiverBudget").textContent        = budgets.adosHiver.toFixed(2) + " €";
-      document.getElementById("enfantsHiverBudget").textContent     = budgets.enfantsHiver.toFixed(2) + " €";
-      document.getElementById("adosPrintempsBudget").textContent    = budgets.adosPrintemps.toFixed(2) + " €";
+      document.getElementById("horsVacancesBudget").textContent = budgets.horsVacances.toFixed(2) + " €";
+      document.getElementById("adosHiverBudget").textContent = budgets.adosHiver.toFixed(2) + " €";
+      document.getElementById("enfantsHiverBudget").textContent = budgets.enfantsHiver.toFixed(2) + " €";
+      document.getElementById("adosPrintempsBudget").textContent = budgets.adosPrintemps.toFixed(2) + " €";
       document.getElementById("enfantsPrintempsBudget").textContent = budgets.enfantsPrintemps.toFixed(2) + " €";
 
-      afficherHistorique("horsVacances",     "horsVacancesHistory");
-      afficherHistorique("adosHiver",        "adosHiverHistory");
-      afficherHistorique("enfantsHiver",     "enfantsHiverHistory");
-      afficherHistorique("adosPrintemps",    "adosPrintempsHistory");
+      afficherHistorique("horsVacances", "horsVacancesHistory");
+      afficherHistorique("adosHiver", "adosHiverHistory");
+      afficherHistorique("enfantsHiver", "enfantsHiverHistory");
+      afficherHistorique("adosPrintemps", "adosPrintempsHistory");
       afficherHistorique("enfantsPrintemps", "enfantsPrintempsHistory");
     }
 
@@ -378,7 +280,6 @@ const analytics = getAnalytics(app);
         container.innerHTML = "<p>Aucune dépense</p>";
         return;
       }
-
       let html = "";
       historyArray.forEach((item, index) => {
         html += `
@@ -394,7 +295,7 @@ const analytics = getAnalytics(app);
     }
 
     /**************************************************************
-     *  Navigation
+     * 8) Navigation entre sections
      **************************************************************/
     function afficherSection(idSection) {
       const sections = document.querySelectorAll(".section");
@@ -408,7 +309,7 @@ const analytics = getAnalytics(app);
     window.afficherSection = afficherSection;
 
     /**************************************************************
-     *  Déduction d'un montant
+     * 9) Déduction d'un montant
      **************************************************************/
     async function deduireMontant(event, budgetKey) {
       event.preventDefault();
@@ -418,7 +319,6 @@ const analytics = getAnalytics(app);
       if (!isNaN(valeur) && valeur > 0) {
         budgets[budgetKey] -= valeur;
         if (budgets[budgetKey] < 0) budgets[budgetKey] = 0;
-
         const histKey = budgetKey + "History";
         budgets[histKey].push({
           date: new Date().toLocaleString("fr-FR"),
@@ -432,7 +332,7 @@ const analytics = getAnalytics(app);
     window.deduireMontant = deduireMontant;
 
     /**************************************************************
-     *  Annuler dépense
+     * 10) Annuler une dépense
      **************************************************************/
     async function annulerDepense(budgetKey, index) {
       if (!confirm("Êtes-vous sûr de vouloir supprimer cette dépense ?")) return;
@@ -440,14 +340,13 @@ const analytics = getAnalytics(app);
       const depense = budgets[histKey][index];
       budgets[budgetKey] += depense.amount;
       budgets[histKey].splice(index, 1);
-
       await sauvegarderBudgetsDansFirestore();
       afficherBudgets();
     }
     window.annulerDepense = annulerDepense;
 
     /**************************************************************
-     *  Init : Charger, cacher le loadingMessage, afficher menu
+     * 11) Initialisation : charger Firestore, cacher le loading, afficher le menu
      **************************************************************/
     (async function init() {
       try {
@@ -455,10 +354,9 @@ const analytics = getAnalytics(app);
         document.getElementById("loadingMessage").style.display = "none";
         afficherSection("menuPrincipal");
       } catch (err) {
-        alert("Erreur : " + err.message);
+        alert("Erreur Firebase : " + err.message);
       }
     })();
   </script>
-
 </body>
 </html>
